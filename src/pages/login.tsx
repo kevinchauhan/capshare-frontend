@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
@@ -11,6 +12,8 @@ const Login = () => {
         password: string
     }
 
+    const [error, setError] = useState('')
+
     const form = useForm({
         defaultValues: {
             email: '',
@@ -19,6 +22,9 @@ const Login = () => {
     })
 
     const onSubmit = (values: formValues) => {
+        if (values.email === '' || values.password === '') {
+            setError('Enter your credentials')
+        }
         console.log(values)
     }
 
@@ -55,7 +61,7 @@ const Login = () => {
                                             <FormControl>
                                                 <Input type="password" placeholder="Enter your password" {...field} />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage >{error}</FormMessage>
                                         </FormItem>
                                     )}
                                 />
