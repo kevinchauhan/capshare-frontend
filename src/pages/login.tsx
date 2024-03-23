@@ -22,6 +22,7 @@ const getSelf = async () => {
 
 const Login = () => {
     const { setUser } = useAuthStore()
+
     const { refetch } = useQuery({
         queryKey: ['self'],
         queryFn: getSelf,
