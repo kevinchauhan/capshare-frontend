@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { login, self } from "@/http/api"
+import { useAuthStore } from "@/store"
 import { Credentials } from "@/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
@@ -20,7 +21,7 @@ const getSelf = async () => {
 }
 
 const Login = () => {
-
+    const { setUser } = useAuthStore()
     const { data: selfData, refetch } = useQuery({
         queryKey: ['self'],
         queryFn: getSelf,
@@ -31,9 +32,8 @@ const Login = () => {
         mutationKey: ['login'],
         mutationFn: loginUser,
         onSuccess: async () => {
-            refetch()
-            console.log('user data', selfData)
-            console.log('login success')
+            const selfDataPromise = await refetch()
+            setUser(selfDataPromise.data)
         }
     })
     const [inputError, setInputError] = useState('')
