@@ -2,17 +2,41 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { login, self } from "@/http/api"
+import { Credentials } from "@/types"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
-const Login = () => {
-    type formValues = {
-        email: string
-        password: string
-    }
+const loginUser = async (credentials: Credentials) => {
+    const { data } = await login(credentials)
+    return data
+}
 
-    const [error, setError] = useState('')
+const getSelf = async () => {
+    const { data } = await self()
+    return data
+}
+
+const Login = () => {
+
+    const { data: selfData, refetch } = useQuery({
+        queryKey: ['self'],
+        queryFn: getSelf,
+        enabled: false
+    })
+
+    const { mutate, isPending, error } = useMutation({
+        mutationKey: ['login'],
+        mutationFn: loginUser,
+        onSuccess: async () => {
+            refetch()
+            console.log('user data', selfData)
+            console.log('login success')
+        }
+    })
+    const [inputError, setInputError] = useState('')
 
     const form = useForm({
         defaultValues: {
@@ -21,19 +45,22 @@ const Login = () => {
         }
     })
 
-    const onSubmit = (values: formValues) => {
+    const onSubmit = (values: Credentials) => {
         if (values.email === '' || values.password === '') {
-            setError('Enter your credentials')
+            setInputError('Enter your credentials')
+        } else {
+            setInputError('')
+            mutate(values)
         }
-        console.log(values)
     }
 
     return (
         <div className="flex flex-col justify-center min-h-screen items-center">
+
             <h1 className="text-2xl mb-2 font-medium">CapShare</h1>
             <Card className="md:w-1/3">
                 <CardHeader>
-                    <CardTitle className="text-center mb-2 text-xl">Sign up</CardTitle>
+                    <CardTitle className="text-center mb-2 text-xl">Login</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -61,16 +88,20 @@ const Login = () => {
                                             <FormControl>
                                                 <Input type="password" placeholder="Enter your password" {...field} />
                                             </FormControl>
-                                            <FormMessage >{error}</FormMessage>
+                                            <FormMessage >{inputError || error?.message}</FormMessage>
                                         </FormItem>
                                     )}
                                 />
                             </div>
                             <div className="md:text-end">
-                                <Link to="/login" className="text-xs md:text-sm hover:underline">Already have an account? Log In</Link>
+                                <Link to="/signup" className="text-xs md:text-sm hover:underline">Don't have an account? Sign up</Link>
                             </div>
                             <div className="md:text-start text-center">
-                                <Button type="submit" >Login</Button>
+                                <Button type="submit" className="" disabled={isPending}>
+                                    {
+                                        isPending ? <div className="spinner-border h-5 w-5 mr-2 border-t-4 border-b-4 border-gray-100 rounded-full animate-spin"></div> : ''
+                                    }
+                                    Login</Button>
                             </div>
                         </form>
                     </Form>
