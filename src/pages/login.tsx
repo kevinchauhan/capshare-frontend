@@ -6,7 +6,7 @@ import { login, self } from "@/http/api"
 import { useAuthStore } from "@/store"
 import { Credentials } from "@/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
@@ -22,7 +22,7 @@ const getSelf = async () => {
 
 const Login = () => {
     const { setUser } = useAuthStore()
-    const { data: selfData, refetch } = useQuery({
+    const { refetch } = useQuery({
         queryKey: ['self'],
         queryFn: getSelf,
         enabled: false
