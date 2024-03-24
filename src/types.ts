@@ -6,4 +6,5 @@ export type Credentials = {
 export type CustomerData = {
     name: string
     mobile: string
+    id?: string
 }

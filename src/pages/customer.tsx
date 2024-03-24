@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createCustomer, deleteCustomer, getCustomer } from '@/http/api'
+import { createCustomer, deleteCustomer, getCustomer, updateCustomerRequest } from '@/http/api'
 import { CustomerData } from '@/types'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -23,6 +23,11 @@ const addCustomer = async (data: CustomerData) => {
     return res
 }
 
+const updateCustomer = async (data: CustomerData) => {
+    const { data: res } = await updateCustomerRequest(data)
+    return res
+}
+
 const fetchCustomers = async () => {
     const { data } = await getCustomer()
     return data
@@ -31,7 +36,8 @@ const fetchCustomers = async () => {
 const Customer = () => {
     const [open, setOpen] = useState(false)
     const [inputError, setInputError] = useState(false)
-    const { register, handleSubmit, resetField } = useForm<CustomerData>()
+    const [editId, setEditId] = useState<null | string>(null)
+    const { register, handleSubmit, resetField, setValue } = useForm<CustomerData>()
 
     const { data: customers, refetch } = useQuery<ICustomerData[]>({
         queryKey: ['customers'],
@@ -39,13 +45,24 @@ const Customer = () => {
     })
 
     useEffect(() => {
-        resetField('name')
-        resetField('mobile')
+        if (!open) {
+            resetField('name')
+            resetField('mobile')
+        }
     }, [open, resetField])
 
-    const { mutate } = useMutation({
+    const { mutate: addMutate } = useMutation({
         mutationKey: ['addCustomer'],
         mutationFn: addCustomer,
+        onSuccess: () => {
+            refetch()
+            setOpen(false)
+        }
+    })
+
+    const { mutate: updateMutate } = useMutation({
+        mutationKey: ['updateCustomer'],
+        mutationFn: updateCustomer,
         onSuccess: () => {
             refetch()
             setOpen(false)
@@ -57,8 +74,19 @@ const Customer = () => {
             setInputError(true)
         } else {
             setInputError(false)
-            mutate(values)
+            if (editId) {
+                updateMutate({ ...values, id: editId })
+            } else {
+                addMutate(values)
+            }
         }
+    }
+
+    const handleEdit = async (index: number, id: string) => {
+        setValue('name', customers![index].name)
+        setValue('mobile', customers![index].mobile)
+        setOpen(true)
+        setEditId(id)
     }
 
     const handleDelete = async (id: string) => {
@@ -108,7 +136,7 @@ const Customer = () => {
             <Card className='mt-5 flex-1'>
                 <div className="px-5 pb-3">
                     {
-                        customers && customers.map(customer =>
+                        customers && customers.map((customer, index) =>
                             <Fragment key={customer._id}>
                                 <div className="flex items-center justify-between my-3">
                                     <div className="flex items-center justify-between">
@@ -119,7 +147,7 @@ const Customer = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <Button variant='outline' className='mr-2' >Edit</Button>
+                                        <Button variant='outline' className='mr-2' onClick={() => handleEdit(index, customer._id)} >Edit</Button>
                                         <Button variant='outline' className='hover:bg-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
                                     </div>
                                 </div>
