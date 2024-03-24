@@ -6,11 +6,11 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createCustomer, getCustomer } from '@/http/api'
+import { createCustomer, deleteCustomer, getCustomer } from '@/http/api'
 import { CustomerData } from '@/types'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface ICustomerData extends CustomerData {
@@ -29,29 +29,30 @@ const fetchCustomers = async () => {
 }
 
 const Customer = () => {
+    const [open, setOpen] = useState(false)
     const [inputError, setInputError] = useState(false)
-    const { data: customers } = useQuery<ICustomerData[]>({
+    const { register, handleSubmit, resetField } = useForm<CustomerData>()
+
+    const { data: customers, refetch } = useQuery<ICustomerData[]>({
         queryKey: ['customers'],
         queryFn: fetchCustomers
     })
+
+    useEffect(() => {
+        resetField('name')
+        resetField('mobile')
+    }, [open, resetField])
 
     const { mutate } = useMutation({
         mutationKey: ['addCustomer'],
         mutationFn: addCustomer,
         onSuccess: () => {
-            console.log('successs...')
+            refetch()
+            setOpen(false)
         }
     })
 
-    const dialogState = () => {
-        resetField('name')
-        resetField('mobile')
-    }
-
-    const { register, handleSubmit, resetField } = useForm<CustomerData>()
-
     const onSubmit: SubmitHandler<CustomerData> = (values) => {
-        console.log(values)
         if (values.name === '' || values.mobile === '') {
             setInputError(true)
         } else {
@@ -60,11 +61,16 @@ const Customer = () => {
         }
     }
 
+    const handleDelete = async (id: string) => {
+        await deleteCustomer(id)
+        refetch()
+    }
+
     return (
         <>
             <SubHeader title='Customers' subTitle='2 Customer'>
-                <Dialog onOpenChange={dialogState} >
-                    <DialogTrigger asChild>
+                <Dialog open={open} onOpenChange={setOpen} >
+                    <DialogTrigger asChild >
                         <Button variant="outline">Add Customer</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
@@ -103,7 +109,7 @@ const Customer = () => {
                 <div className="px-5 pb-3">
                     {
                         customers && customers.map(customer =>
-                            <>
+                            <Fragment key={customer._id}>
                                 <div className="flex items-center justify-between my-3">
                                     <div className="flex items-center justify-between">
                                         <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full mr-2">KC</div>
@@ -114,11 +120,11 @@ const Customer = () => {
                                     </div>
                                     <div>
                                         <Button variant='outline' className='mr-2' >Edit</Button>
-                                        <Button variant='outline' className='hover:bg-destructive' >Delete</Button>
+                                        <Button variant='outline' className='hover:bg-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
                                     </div>
                                 </div>
                                 <DropdownMenuSeparator />
-                            </>
+                            </Fragment>
                         )
                     }
                 </div>

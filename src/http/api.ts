@@ -7,3 +7,4 @@ export const logout = () => api.post('/auth/logout')
 
 export const createCustomer = (data: CustomerData) => api.post('/customer/register', data)
 export const getCustomer = () => api.get('/customer')
+export const deleteCustomer = (id: string) => api.delete('/customer', { data: { id } })
