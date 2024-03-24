@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import Dashboard from "./layouts/dashboard";
 import Public from "./layouts/public";
 import Root from "./layouts/root";
+import Customer from "./pages/customer";
 
 export const router = createBrowserRouter([
     {
@@ -18,7 +19,11 @@ export const router = createBrowserRouter([
                     {
                         path: '',
                         element: <Home />
-                    }
+                    },
+                    {
+                        path: 'customer',
+                        element: <Customer />
+                    },
                 ]
             },
             {

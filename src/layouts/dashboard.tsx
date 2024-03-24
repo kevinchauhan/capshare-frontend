@@ -11,9 +11,9 @@ const Dashboard = () => {
     return (
         <div className="flex h-screen">
             <Sidebar />
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 flex flex-col overflow-auto">
                 <Header />
-                <div className="p-5">
+                <div className="p-5 flex flex-col flex-1">
                     <Outlet />
                 </div>
             </div>
