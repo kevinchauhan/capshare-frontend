@@ -6,20 +6,34 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createCustomer } from '@/http/api'
+import { createCustomer, getCustomer } from '@/http/api'
 import { CustomerData } from '@/types'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+
+interface ICustomerData extends CustomerData {
+    _id: string
+    userId: string
+}
 
 const addCustomer = async (data: CustomerData) => {
     const { data: res } = await createCustomer(data)
     return res
 }
 
+const fetchCustomers = async () => {
+    const { data } = await getCustomer()
+    return data
+}
+
 const Customer = () => {
     const [inputError, setInputError] = useState(false)
+    const { data: customers } = useQuery<ICustomerData[]>({
+        queryKey: ['customers'],
+        queryFn: fetchCustomers
+    })
 
     const { mutate } = useMutation({
         mutationKey: ['addCustomer'],
@@ -87,34 +101,26 @@ const Customer = () => {
             </SubHeader>
             <Card className='mt-5 flex-1'>
                 <div className="px-5 pb-3">
-                    <div className="flex items-center justify-between my-3">
-                        <div className="flex items-center justify-between">
-                            <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full mr-2">KC</div>
-                            <div>
-                                <h3 className='capitalize font-medium'>kevin</h3>
-                                <h5 className='capitalize text-xs text-gray-500'>9910157891</h5>
-                            </div>
-                        </div>
-                        <div>
-                            <Button variant='outline' className='mr-2' >Edit</Button>
-                            <Button variant='outline' className='hover:bg-destructive' >Delete</Button>
-                        </div>
-                    </div>
-                    <DropdownMenuSeparator />
-                    <div className="flex items-center justify-between my-3">
-                        <div className="flex items-center justify-between">
-                            <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full mr-2">KC</div>
-                            <div>
-                                <h3 className='capitalize font-medium'>kevin</h3>
-                                <h5 className='capitalize text-xs text-gray-500'>9910157891</h5>
-                            </div>
-                        </div>
-                        <div>
-                            <Button variant='outline' className='mr-2' >Edit</Button>
-                            <Button variant='outline' >Delete</Button>
-                        </div>
-                    </div>
-                    <DropdownMenuSeparator />
+                    {
+                        customers && customers.map(customer =>
+                            <>
+                                <div className="flex items-center justify-between my-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full mr-2">KC</div>
+                                        <div>
+                                            <h3 className='capitalize font-medium'>{customer.name}</h3>
+                                            <h5 className='capitalize text-xs text-gray-500'>{customer.mobile}</h5>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Button variant='outline' className='mr-2' >Edit</Button>
+                                        <Button variant='outline' className='hover:bg-destructive' >Delete</Button>
+                                    </div>
+                                </div>
+                                <DropdownMenuSeparator />
+                            </>
+                        )
+                    }
                 </div>
             </Card>
         </>
