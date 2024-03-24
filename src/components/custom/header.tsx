@@ -1,7 +1,20 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import { Button } from '../ui/button'
+import { useMutation } from '@tanstack/react-query'
+import { logout } from '@/http/api'
+import { useAuthStore } from '@/store'
 
 const Header = () => {
+    const { logout: storeLogout } = useAuthStore()
+
+    const { mutate } = useMutation({
+        mutationKey: ['logout'],
+        mutationFn: logout,
+        onSuccess: () => {
+            storeLogout()
+        }
+    })
+
     return (
         <header className="border-b">
             <div className="mx-auto px-4">
@@ -20,7 +33,9 @@ const Header = () => {
                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="hover:cursor-pointer">Profile</DropdownMenuItem>
-                                <DropdownMenuItem className="hover:cursor-pointer">Logout</DropdownMenuItem>
+                                <DropdownMenuItem className="hover:cursor-pointer">
+                                    <button onClick={() => mutate()} >Logout</button>
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
 
