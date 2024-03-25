@@ -6,6 +6,7 @@ import Dashboard from "./layouts/dashboard";
 import Public from "./layouts/public";
 import Root from "./layouts/root";
 import Customer from "./pages/customer";
+import Events from "./pages/events";
 
 export const router = createBrowserRouter([
     {
@@ -21,8 +22,12 @@ export const router = createBrowserRouter([
                         element: <Home />
                     },
                     {
-                        path: 'customer',
+                        path: 'customers',
                         element: <Customer />
+                    },
+                    {
+                        path: 'events',
+                        element: <Events />
                     },
                 ]
             },

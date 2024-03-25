@@ -123,3 +123,12 @@
     --ring: 224.3 76.3% 48%;
   }
 }
+
+.menu .active {
+  margin-left: 1.5rem;
+  background-color: hsl(var(--primary));
+}
+
+.menu a {
+  transition: all .3s;
+}
