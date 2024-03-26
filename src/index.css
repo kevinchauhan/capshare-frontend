@@ -127,6 +127,7 @@
 .menu .active {
   margin-left: 1.5rem;
   background-color: hsl(var(--primary));
+  color: white;
 }
 
 .menu a {

@@ -7,16 +7,13 @@ import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createCustomer, deleteCustomer, getCustomer, updateCustomerRequest } from '@/http/api'
-import { CustomerData } from '@/types'
+import { CustomerData, ICustomerData } from '@/types'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Fragment, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-interface ICustomerData extends CustomerData {
-    _id: string
-    userId: string
-}
+
 
 const addCustomer = async (data: CustomerData) => {
     const { data: res } = await createCustomer(data)
@@ -140,7 +137,7 @@ const Customer = () => {
                             <Fragment key={customer._id}>
                                 <div className="flex items-center justify-between my-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-full mr-2">KC</div>
+                                        <div className="w-10 h-10 bg-[#dfe5eb] dark:bg-secondary light:text-gray-700 flex items-center justify-center rounded-full mr-2">KC</div>
                                         <div>
                                             <h3 className='capitalize font-medium'>{customer.name}</h3>
                                             <h5 className='capitalize text-xs text-gray-500'>{customer.mobile}</h5>
@@ -148,7 +145,7 @@ const Customer = () => {
                                     </div>
                                     <div>
                                         <Button variant='outline' className='mr-2' onClick={() => handleEdit(index, customer._id)} >Edit</Button>
-                                        <Button variant='outline' className='hover:bg-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
+                                        <Button variant='outline' className='hover:bg-destructive hover:border-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
                                     </div>
                                 </div>
                                 <DropdownMenuSeparator />

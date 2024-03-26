@@ -8,3 +8,13 @@ export type CustomerData = {
     mobile: string
     id?: string
 }
+
+export interface ICustomerData extends CustomerData {
+    _id: string
+    userId: string
+}
+
+export type PostEvent = {
+    name: string
+    customerId: string
+}
