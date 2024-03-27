@@ -8,18 +8,18 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { createEvent, getCustomer, getEvents } from "@/http/api"
-import { CustomerData, ICustomerData, PostEvent } from "@/types"
+import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
+import { ICustomerData, PostEvent } from "@/types"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
 type EventData = {
     _id: string
     name: string
     userId: string
-    customerId: CustomerData
+    customerId: ICustomerData
     isCompleted: boolean
 }
 
@@ -38,8 +38,24 @@ const addEvent = async (data: PostEvent) => {
     return
 }
 
+const updateEvent = async (data: PostEvent) => {
+    const { data: res } = await updateEventRequest(data)
+    return res
+}
+
 const Events = () => {
     const [open, setOpen] = useState(false)
+    const [inputError, setInputError] = useState(false)
+    const [editId, setEditId] = useState<null | string>(null)
+    const { register, handleSubmit, setValue, getValues, resetField } = useForm<PostEvent>()
+
+    useEffect(() => {
+        if (!open) {
+            resetField('name')
+            resetField('customerId')
+            setEditId(null)
+        }
+    }, [open, resetField])
 
     const { data: events, refetch } = useQuery<EventData[]>({
         queryKey: ['events'],
@@ -50,8 +66,6 @@ const Events = () => {
         queryFn: fetchCustomers
     })
 
-    const { register, handleSubmit, setValue } = useForm<PostEvent>()
-
     const { mutate: addMutate } = useMutation({
         mutationKey: ['addEvent'],
         mutationFn: addEvent,
@@ -61,8 +75,38 @@ const Events = () => {
         }
     })
 
+    const { mutate: updateMutate } = useMutation({
+        mutationKey: ['updateEvent'],
+        mutationFn: updateEvent,
+        onSuccess: () => {
+            refetch()
+            setOpen(false)
+        }
+    })
+
     const onSubmit = (values: PostEvent) => {
-        addMutate(values)
+        if (values.name === '' || values.customerId === '') {
+            setInputError(true)
+        } else {
+            setInputError(false)
+            if (editId) {
+
+                // updateMutate({ ...values, id: editId })
+            } else {
+                addMutate(values)
+            }
+        }
+    }
+    const handleEdit = async (index: number, id: string) => {
+        setValue('name', events![index].name)
+        setValue('customerId', events![index].customerId._id)
+        setOpen(true)
+        setEditId(id)
+    }
+
+    const handleDelete = async (id: string) => {
+        await deleteEvent(id)
+        refetch()
     }
 
     return (
@@ -76,7 +120,7 @@ const Events = () => {
                         <DialogHeader>
                             <DialogTitle>Events Details</DialogTitle>
                         </DialogHeader>
-                        <Alert variant="destructive">
+                        <Alert variant="destructive" hidden={!inputError}>
                             <div className="flex items-center">
                                 <ExclamationTriangleIcon className="" />
                                 <AlertTitle className='ml-2'>Fill all details</AlertTitle>
@@ -89,14 +133,14 @@ const Events = () => {
                                         Customer
                                     </Label>
                                     <div className="col-span-3">
-                                        <Select onValueChange={(id: string) => setValue('customerId', id)} name={register('customerId').name} >
+                                        <Select defaultValue={(editId && getValues('customerId')) || undefined} onValueChange={(id: string) => setValue('customerId', id)} name={register('customerId').name} >
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="select customer" />
                                             </SelectTrigger>
                                             <SelectContent {...register('customerId')}>
                                                 {
                                                     customers && customers.map((customer) =>
-                                                        <SelectItem className="hover:cursor-pointer" value={customer._id} >{customer.name}</SelectItem>
+                                                        <SelectItem key={customer._id} className="hover:cursor-pointer" value={customer._id} >{customer.name}</SelectItem>
                                                     )
                                                 }
                                             </SelectContent>
@@ -107,7 +151,7 @@ const Events = () => {
                                     <Label htmlFor="name" className="text-right">
                                         Event Title
                                     </Label>
-                                    <Input className="col-span-3" {...register('name')} />
+                                    <Input className="col-span-3" {...register('name')} placeholder="name the event" />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -129,8 +173,8 @@ const Events = () => {
                                         <p className="text-gray-500 text-sm">{event.customerId.mobile}</p>
                                     </div>
                                     <div className="lg:text-lg" >
-                                        <button className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
-                                        <button className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
+                                        <button onClick={() => handleEdit(index, event._id)} className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
+                                        <button onClick={() => handleDelete(event._id)} className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
                                     </div>
                                 </div>
                                 <CardContent className="border-y py-2">

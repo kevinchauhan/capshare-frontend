@@ -12,3 +12,5 @@ export const deleteCustomer = (id: string) => api.delete('/customer', { data: { 
 
 export const getEvents = () => api.get('/event')
 export const createEvent = (data: PostEvent) => api.post('/event/register', data)
+export const updateEventRequest = (data: PostEvent) => api.put('/event/update', data)
+export const deleteEvent = (id: string) => api.delete('/event', { data: { id } })
