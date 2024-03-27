@@ -8,6 +8,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
 import { ICustomerData, PostEvent } from "@/types"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
@@ -48,6 +49,7 @@ const Events = () => {
     const [inputError, setInputError] = useState(false)
     const [editId, setEditId] = useState<null | string>(null)
     const { register, handleSubmit, setValue, getValues, resetField } = useForm<PostEvent>()
+    const [skeletonCount] = useState([1, 2, 3])
 
     useEffect(() => {
         if (!open) {
@@ -57,7 +59,7 @@ const Events = () => {
         }
     }, [open, resetField])
 
-    const { data: events, refetch } = useQuery<EventData[]>({
+    const { data: events, refetch, isPending } = useQuery<EventData[]>({
         queryKey: ['events'],
         queryFn: fetchEvents
     })
@@ -163,44 +165,63 @@ const Events = () => {
             </SubHeader>
             <Nav />
             <Card className='mt-2 flex-1 px-5 pb-5'>
-                <div className="grid md:grid-cols-3 gap-3 pt-5">
-                    {
-                        events && events.map((event, index) =>
-                            <Card className=" drop-shadow-xl" key={index}>
-                                <div className="px-6 py-2 flex justify-between items-center">
-                                    <div>
-                                        <h2 className="">{event.customerId.name}</h2>
-                                        <p className="text-gray-500 text-sm">{event.customerId.mobile}</p>
-                                    </div>
-                                    <div className="lg:text-lg" >
-                                        <button onClick={() => handleEdit(index, event._id)} className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
-                                        <button onClick={() => handleDelete(event._id)} className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
-                                    </div>
-                                </div>
-                                <CardContent className="border-y py-2">
-                                    <h2 className="text-center">{event.name}</h2>
-                                    <div className="flex w-1/2 mx-auto text-gray-500 text-sm justify-between py-1">
-                                        <span><i className="fa-regular fa-folder"></i> 2</span>
-                                        <span><i className="fa-regular fa-image"></i> 2</span>
-                                        <span><i className="fa-regular fa-square-check"></i> 0</span>
-                                    </div>
-                                </CardContent>
-                                <CardFooter className="py-3 justify-between">
-                                    <Button size='sm' variant='outline' className="">12547</Button>
-                                    <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    }
-                </div>
                 {
-                    events?.length === 0 &&
-                    <div className="flex items-center justify-center h-full">
-                        <h2 className='text-gray-500'>No customer available</h2>
-                    </div>
+                    isPending ?
+                        <div className="grid md:grid-cols-3 gap-3 pt-5">
+                            {
+                                skeletonCount.map(() =>
+                                    <div className="flex flex-col space-y-3 mt-5">
+                                        <Skeleton className="h-[125px]  rounded-xl" />
+                                        <div className="space-y-2">
+                                            <Skeleton className="h-4 w-[90%]" />
+                                            <Skeleton className="h-4 w-[70%]" />
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                        :
+                        <>
+                            <div className="grid md:grid-cols-3 gap-3 pt-5">
+                                {
+                                    events && events.map((event, index) =>
+                                        <Card className=" drop-shadow-xl" key={index}>
+                                            <div className="px-6 py-2 flex justify-between items-center">
+                                                <div>
+                                                    <h2 className="">{event.customerId.name}</h2>
+                                                    <p className="text-gray-500 text-sm">{event.customerId.mobile}</p>
+                                                </div>
+                                                <div className="lg:text-lg" >
+                                                    <button onClick={() => handleEdit(index, event._id)} className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
+                                                    <button onClick={() => handleDelete(event._id)} className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
+                                                </div>
+                                            </div>
+                                            <CardContent className="border-y py-2">
+                                                <h2 className="text-center">{event.name}</h2>
+                                                <div className="flex w-1/2 mx-auto text-gray-500 text-sm justify-between py-1">
+                                                    <span><i className="fa-regular fa-folder"></i> 2</span>
+                                                    <span><i className="fa-regular fa-image"></i> 2</span>
+                                                    <span><i className="fa-regular fa-square-check"></i> 0</span>
+                                                </div>
+                                            </CardContent>
+                                            <CardFooter className="py-3 justify-between">
+                                                <Button size='sm' variant='outline' className="">12547</Button>
+                                                <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
+                                            </CardFooter>
+                                        </Card>
+                                    )
+                                }
+                            </div>
+                            {
+                                events?.length === 0 &&
+                                <div className="flex items-center justify-center h-full">
+                                    <h2 className='text-gray-500'>No customer available</h2>
+                                </div>
+                            }
+                        </>
                 }
 
-            </Card>
+            </Card >
         </>
     )
 }
