@@ -19,3 +19,17 @@ export type PostEvent = {
     customerId: string
     id?: string
 }
+
+export type FolderDetails = {
+    _id: string
+    name: string
+    userId: string
+    customerId: string
+    eventId: string
+}
+
+export type FolderData = {
+    name: string
+    customerId: string
+    eventId: string
+}

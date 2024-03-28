@@ -7,6 +7,7 @@ import Public from "./layouts/public";
 import Root from "./layouts/root";
 import Customer from "./pages/customer";
 import Events from "./pages/events";
+import Folder from "./pages/folder";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'events',
                         element: <Events />
+                    },
+                    {
+                        path: 'events/:id',
+                        element: <Folder />
                     },
                 ]
             },

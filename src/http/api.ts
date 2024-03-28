@@ -1,4 +1,4 @@
-import { Credentials, CustomerData, PostEvent } from "@/types";
+import { Credentials, CustomerData, FolderData, PostEvent } from "@/types";
 import { api } from "./client";
 
 export const login = (credentials: Credentials) => api.post('/auth/login', credentials)
@@ -14,3 +14,6 @@ export const getEvents = () => api.get('/event')
 export const createEvent = (data: PostEvent) => api.post('/event/register', data)
 export const updateEventRequest = (data: PostEvent) => api.put('/event/update', data)
 export const deleteEvent = (id: string) => api.delete('/event', { data: { id } })
+
+export const getFolders = (id: string) => api.get(`/folder/${id}`)
+export const createFolder = (data: FolderData) => api.post('/folder/register', data)

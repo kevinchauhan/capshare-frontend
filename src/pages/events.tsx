@@ -15,6 +15,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
 
 type EventData = {
     _id: string
@@ -206,7 +207,9 @@ const Events = () => {
                                             </CardContent>
                                             <CardFooter className="py-3 justify-between">
                                                 <Button size='sm' variant='outline' className="">12547</Button>
-                                                <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
+                                                <Link to={`/events/${event._id}?customer=${event.customerId._id}`}>
+                                                    <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
+                                                </Link>
                                             </CardFooter>
                                         </Card>
                                     )
