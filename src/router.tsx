@@ -8,6 +8,7 @@ import Root from "./layouts/root";
 import Customer from "./pages/customer";
 import Events from "./pages/events";
 import Folder from "./pages/folder";
+import File from "./pages/file";
 
 export const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'events/:id',
                         element: <Folder />
+                    },
+                    {
+                        path: 'files/:id',
+                        element: <File />
                     },
                 ]
             },

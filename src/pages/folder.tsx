@@ -100,7 +100,7 @@ const Folder = () => {
                 <div className="flex flex-wrap gap-10">
                     {
                         folders && folders.map((folder) =>
-                            <Link to={`/events/${folder.eventId}/${folder._id}`}>
+                            <Link to={`/files/${folder._id}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" className="mx-auto" width={100} height={100} viewBox="0 0 256 256" xmlSpace="preserve">
                                     <defs>
                                     </defs>
