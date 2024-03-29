@@ -10,20 +10,15 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
-import { ICustomerData, PostEvent } from "@/types"
+import { useEventStore } from "@/store"
+import { EventData, ICustomerData, PostEvent } from "@/types"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
-type EventData = {
-    _id: string
-    name: string
-    userId: string
-    customerId: ICustomerData
-    isCompleted: boolean
-}
+
 
 const fetchEvents = async () => {
     const { data } = await getEvents()
@@ -51,6 +46,7 @@ const Events = () => {
     const [editId, setEditId] = useState<null | string>(null)
     const { register, handleSubmit, setValue, getValues, resetField } = useForm<PostEvent>()
     const [skeletonCount] = useState([1, 2, 3])
+    const { setEvent } = useEventStore()
 
     useEffect(() => {
         if (!open) {
@@ -64,6 +60,13 @@ const Events = () => {
         queryKey: ['events'],
         queryFn: fetchEvents
     })
+
+    useEffect(() => {
+        if (events) {
+            setEvent(events)
+        }
+    }, [events, setEvent])
+
     const { data: customers } = useQuery<ICustomerData[]>({
         queryKey: ['customers'],
         queryFn: fetchCustomers
@@ -207,7 +210,7 @@ const Events = () => {
                                             </CardContent>
                                             <CardFooter className="py-3 justify-between">
                                                 <Button size='sm' variant='outline' className="">12547</Button>
-                                                <Link to={`/events/${event._id}?customer=${event.customerId._id}`}>
+                                                <Link to={`/events/${event._id}`}>
                                                     <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
                                                 </Link>
                                             </CardFooter>

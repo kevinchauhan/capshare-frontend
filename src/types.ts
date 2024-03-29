@@ -14,6 +14,14 @@ export interface ICustomerData extends CustomerData {
     userId: string
 }
 
+export type EventData = {
+    _id: string
+    name: string
+    userId: string
+    customerId: ICustomerData
+    isCompleted: boolean
+}
+
 export type PostEvent = {
     name: string
     customerId: string

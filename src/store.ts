@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { devtools } from "zustand/middleware"
+import { EventData } from "./types"
 
 export interface User {
     _id: string
@@ -15,10 +16,22 @@ interface AuthState {
     logout: () => void
 }
 
+interface EventState {
+    events: null | EventData[]
+    setEvent: (events: EventData[] | null) => void
+}
+
 export const useAuthStore = create<AuthState>()(
     devtools((set) => ({
         user: null,
-        setUser: (user) => set({ user: user }),
+        setUser: (user) => set({ user }),
         logout: () => set({ user: null })
+    }))
+)
+
+export const useEventStore = create<EventState>()(
+    devtools((set) => ({
+        events: null,
+        setEvent: (events) => set({ events })
     }))
 )

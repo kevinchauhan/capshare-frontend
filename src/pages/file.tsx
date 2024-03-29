@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { createFile } from "@/http/api"
-import { useCallback, useState } from "react"
+import { useEventStore } from "@/store"
+import { EventData } from "@/types"
+import { useCallback, useEffect, useState } from "react"
 import { useDropzone } from 'react-dropzone'
+import { EmptyObject } from "react-hook-form"
 import { useParams } from "react-router-dom"
 
 const uploadImage = async (files: File[], eventId: string) => {
@@ -22,7 +25,16 @@ const uploadImage = async (files: File[], eventId: string) => {
 
 const File = () => {
     const [open, setOpen] = useState(false)
+    const [eventData, setEventData] = useState<EventData | EmptyObject>({})
+    const { events } = useEventStore()
     const { id } = useParams()
+
+    useEffect(() => {
+        if (events) {
+            const currentEvent = events.filter(event => event._id === id)
+            setEventData(currentEvent[0])
+        }
+    }, [events, id])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // Do something with the files
@@ -36,7 +48,7 @@ const File = () => {
 
     return (
         <>
-            <SubHeader title='Event name' subTitle=''>
+            <SubHeader title={eventData?.name} subTitle=''>
                 <Dialog open={open} onOpenChange={setOpen} >
                     <DialogTrigger asChild >
                         <Button variant="outline">Add</Button>
