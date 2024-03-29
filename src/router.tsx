@@ -33,12 +33,8 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: 'events/:id',
-                        element: <Folder />
-                    },
-                    {
-                        path: 'files/:id',
                         element: <File />
-                    },
+                    }
                 ]
             },
             {
