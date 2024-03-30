@@ -2,18 +2,17 @@ import SubHeader from "@/components/custom/subHeader"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { createFile, getEvent, getFiles } from "@/http/api"
 import { useEventStore } from "@/store"
 import { EventData, FileDetails } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useDropzone } from 'react-dropzone'
 import { EmptyObject } from "react-hook-form"
 import { Link, useParams } from "react-router-dom"
-import { partial } from "filesize";
+import { partial } from "filesize"
 import { Skeleton } from "@/components/ui/skeleton"
-const filesize = partial({ standard: "jedec" });
+const filesize = partial({ standard: "jedec" })
 
 const uploadImage = async (files: File[], eventId: string) => {
     try {
@@ -22,6 +21,7 @@ const uploadImage = async (files: File[], eventId: string) => {
             formData.append('logo', file)
         })
         const response = await createFile(eventId, formData)
+        return response
         console.log('Image uploaded successfully:', response.data)
     } catch (error) {
         console.error('Error uploading image:', error)
@@ -38,12 +38,13 @@ const fetchEvent = async (id: string) => {
 }
 
 const File = () => {
-    const [open, setOpen] = useState(false)
     const [eventData, setEventData] = useState<EventData | EmptyObject>({})
     const { events } = useEventStore()
     const { id } = useParams()
     const [skeletonCount] = useState([1, 2, 3, 4, 5, 6])
-    const { data: files, isPending } = useQuery<FileDetails>({
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const { data: files, isPending, refetch: filesRefetch } = useQuery<FileDetails>({
         queryKey: ['files'],
         queryFn: () => fetchFiles(id!)
     })
@@ -72,13 +73,30 @@ const File = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event, setEventData])
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
         // Do something with the files
-        uploadImage(acceptedFiles, id!)
+        await uploadImage(acceptedFiles, id!)
+        filesRefetch()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+    const handleButtonClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click()
+        }
+    }
+
+    const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (files) {
+            await uploadImage(Array.from(files), id!)
+            filesRefetch()
+        } else {
+            alert('Please select file(s) to upload.')
+        }
+    }
 
     return (
         <>
@@ -103,43 +121,16 @@ const File = () => {
             </Breadcrumb>
 
             <SubHeader title={eventData?.name} subTitle=''>
-                <Dialog open={open} onOpenChange={setOpen} >
-                    <DialogTrigger asChild >
-                        <Button variant="outline">Add</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Customer Details</DialogTitle>
-                        </DialogHeader>
-                        {/* <Alert variant="destructive" hidden={!inputError}>
-                            <div className="flex items-center">
-                                <ExclamationTriangleIcon className="" />
-                                <AlertTitle className='ml-2'>Fill all details</AlertTitle>
-                            </div>
-                        </Alert> */}
-                        {/* <form onSubmit={handleSubmit(onSubmit)} >
-                            <div className="grid gap-4 py-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label htmlFor="name" className="text-right">
-                                        Name
-                                    </Label>
-                                    <Input className="col-span-3" {...register('name')} placeholder="folder name" />
-                                </div>
-                            </div>
-                            <DialogFooter>
-                                <Button type="submit" variant='outline' className='border-primary'>Save</Button>
-                            </DialogFooter>
-                        </form> */}
-                    </DialogContent>
-                </Dialog>
+                <input type="file" hidden={true} ref={fileInputRef} onChange={handleFileInputChange} />
+                <Button variant="outline" onClick={handleButtonClick}>Add</Button>
             </SubHeader>
 
             <Card className='mt-5 flex-1 p-5'>
                 {isPending &&
                     <div className="grid md:grid-cols-6 gap-3 pt-5">
                         {
-                            skeletonCount.map(() =>
-                                <div className="flex flex-col mt-5">
+                            skeletonCount.map((e) =>
+                                <div key={e} className="flex flex-col mt-5">
                                     <Skeleton className="h-[125px]  rounded-xl" />
                                 </div>
                             )
@@ -172,7 +163,7 @@ const File = () => {
                     <div className="grid grid-cols-6 gap-3">
                         {
                             files.data.map(file =>
-                                <div className="rounded-md overflow-hidden border-2 max-h-50 flex flex-col">
+                                <div key={file._id} className="rounded-md overflow-hidden border-2 max-h-50 flex flex-col">
                                     <div className="flex flex-1 overflow-hidden">
                                         <img src={file.path} className="object-contain mx-auto" alt="" />
                                     </div>
