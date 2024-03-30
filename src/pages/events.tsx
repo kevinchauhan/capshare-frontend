@@ -168,7 +168,7 @@ const Events = () => {
                 </Dialog>
             </SubHeader>
             <Nav />
-            <Card className='mt-2 flex-1 px-5 pb-5'>
+            <Card className=' flex-1 pb-5 bg-transparent border-none shadow-none'>
                 {
                     isPending ?
                         <div className="grid md:grid-cols-3 gap-3 pt-5">
@@ -186,7 +186,7 @@ const Events = () => {
                         </div>
                         :
                         <>
-                            <div className="grid md:grid-cols-3 gap-3 pt-5">
+                            <div className="grid md:grid-cols-3 gap-3 pt-3">
                                 {
                                     events && events.map((event, index) =>
                                         <Card className=" drop-shadow-xl" key={index}>
