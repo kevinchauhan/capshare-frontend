@@ -41,3 +41,16 @@ export type FolderData = {
     customerId: string
     eventId: string
 }
+
+export type FileDetails = {
+    data: [{
+        _id: string
+        name: string
+        eventId: string
+        originalname: string
+        mimetype: string
+        path: string
+        size: number
+        isSelected: boolean
+    }]
+}

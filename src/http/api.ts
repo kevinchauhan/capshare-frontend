@@ -18,6 +18,7 @@ export const deleteEvent = (id: string) => api.delete('/event', { data: { id } }
 export const getFolders = (id: string) => api.get(`/folder/${id}`)
 export const createFolder = (data: FolderData) => api.post('/folder/register', data)
 
+export const getFiles = (id: string) => api.get(`/file/${id}`)
 export const createFile = (id: string, data: FormData) => api.post(`/file/register/${id}`, data, {
     headers: {
         'Content-Type': 'multipart/form-data'
