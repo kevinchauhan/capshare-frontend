@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { createFile, getFiles } from "@/http/api"
+import { createFile, getEvent, getFiles } from "@/http/api"
 import { useEventStore } from "@/store"
 import { EventData, FileDetails } from "@/types"
 import { useQuery } from "@tanstack/react-query"
@@ -32,6 +32,10 @@ const fetchFiles = async (id: string) => {
     const { data } = await getFiles(id)
     return data
 }
+const fetchEvent = async (id: string) => {
+    const { data } = await getEvent(id)
+    return data
+}
 
 const File = () => {
     const [open, setOpen] = useState(false)
@@ -44,12 +48,29 @@ const File = () => {
         queryFn: () => fetchFiles(id!)
     })
 
+    const { data: event, refetch } = useQuery<EventData>({
+        queryKey: ['event'],
+        queryFn: () => fetchEvent(id!),
+        enabled: true
+    })
+
     useEffect(() => {
         if (events) {
             const currentEvent = events.filter(event => event._id === id)
             setEventData(currentEvent[0])
         }
     }, [events, id])
+
+    useEffect(() => {
+        if (!events && !event) {
+            refetch()
+        } else {
+            if (event) {
+                setEventData(event)
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [event, setEventData])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // Do something with the files

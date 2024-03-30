@@ -11,6 +11,7 @@ export const updateCustomerRequest = (data: CustomerData) => api.put('/customer/
 export const deleteCustomer = (id: string) => api.delete('/customer', { data: { id } })
 
 export const getEvents = () => api.get('/event')
+export const getEvent = (id: string) => api.get(`/event/${id}`)
 export const createEvent = (data: PostEvent) => api.post('/event/register', data)
 export const updateEventRequest = (data: PostEvent) => api.put('/event/update', data)
 export const deleteEvent = (id: string) => api.delete('/event', { data: { id } })
