@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 const Sidebar = () => {
     return (
         <aside className="w-64 h-screen border-r flex flex-col p-4">
-            <div className="logo text-xl font-bold text-center mb-5">
+            <div className="logo text-primary text-3xl italic font-bold text-center mb-5">
                 <h1>CapShare</h1>
             </div>
             <div className="mt-10">

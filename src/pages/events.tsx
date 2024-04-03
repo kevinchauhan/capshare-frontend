@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Switch } from "@/components/ui/switch"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
 import { useEventStore } from "@/store"
 import { EventData, ICustomerData, PostEvent } from "@/types"
@@ -145,7 +146,7 @@ const Events = () => {
                                             </SelectTrigger>
                                             <SelectContent {...register('customerId')}>
                                                 {
-                                                    customers && customers.map((customer) =>
+                                                    customers?.map((customer) =>
                                                         <SelectItem key={customer._id} className="hover:cursor-pointer" value={customer._id} >{customer.name}</SelectItem>
                                                     )
                                                 }
@@ -202,8 +203,7 @@ const Events = () => {
                                             </div>
                                             <CardContent className="border-y py-2">
                                                 <h2 className="text-center">{event.name}</h2>
-                                                <div className="flex w-1/2 mx-auto text-gray-500 text-sm justify-between py-1">
-                                                    <span><i className="fa-regular fa-folder"></i> 2</span>
+                                                <div className="flex w-1/3 mx-auto text-gray-500 text-sm justify-between py-1">
                                                     <span><i className="fa-regular fa-image"></i> 2</span>
                                                     <span><i className="fa-regular fa-square-check"></i> 0</span>
                                                 </div>
