@@ -1,3 +1,9 @@
+export type Register = {
+    name: string
+    email: string
+    password: string
+    confirmPassword: string
+}
 export type Credentials = {
     email: string
     password: string

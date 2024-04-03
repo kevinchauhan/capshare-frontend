@@ -1,6 +1,7 @@
-import { Credentials, CustomerData, FolderData, PostEvent } from "@/types";
+import { Credentials, CustomerData, FolderData, PostEvent, Register } from "@/types";
 import { api } from "./client";
 
+export const register = (data: Register) => api.post('/auth/register', data)
 export const login = (credentials: Credentials) => api.post('/auth/login', credentials)
 export const self = () => api.get('/auth/self')
 export const logout = () => api.post('/auth/logout')

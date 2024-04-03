@@ -95,7 +95,7 @@ const Login = () => {
                                 />
                             </div>
                             <div className="md:text-end">
-                                <Link to="/signup" className="text-xs md:text-sm hover:underline">Don't have an account? Sign up</Link>
+                                <Link to="/auth/signup" className="text-xs md:text-sm hover:underline">Don't have an account? Sign up</Link>
                             </div>
                             <div className="md:text-start text-center">
                                 <Button type="submit" className="" disabled={isPending}>
