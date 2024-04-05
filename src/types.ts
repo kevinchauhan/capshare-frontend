@@ -60,3 +60,9 @@ export type FileDetails = {
         isSelected: boolean
     }]
 }
+
+export type FilterEventTypes = {
+    ALL: 'ALL'
+    PENDING: 'PENDING'
+    COMPLETED: 'COMPLETED'
+}

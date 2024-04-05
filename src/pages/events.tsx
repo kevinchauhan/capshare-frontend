@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Switch } from "@/components/ui/switch"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
 import { useEventStore } from "@/store"
 import { EventData, ICustomerData, PostEvent } from "@/types"
@@ -48,6 +47,8 @@ const Events = () => {
     const { register, handleSubmit, setValue, getValues, resetField } = useForm<PostEvent>()
     const [skeletonCount] = useState([1, 2, 3])
     const { setEvent } = useEventStore()
+    const [filteredEvent, setFilteredEvent] = useState<EventData[]>([])
+    const [selectedTab, setSelectedTab] = useState('all')
 
     useEffect(() => {
         if (!open) {
@@ -64,6 +65,7 @@ const Events = () => {
 
     useEffect(() => {
         if (events) {
+            setFilteredEvent(events)
             setEvent(events)
         }
     }, [events, setEvent])
@@ -72,6 +74,7 @@ const Events = () => {
         queryKey: ['customers'],
         queryFn: fetchCustomers
     })
+    console.log(events)
 
     const { mutate: addMutate } = useMutation({
         mutationKey: ['addEvent'],
@@ -114,6 +117,29 @@ const Events = () => {
     const handleDelete = async (id: string) => {
         await deleteEvent(id)
         refetch()
+    }
+
+    const handleFilter = (arg: string) => {
+        switch (arg) {
+            case 'pending':
+                if (events) {
+                    setFilteredEvent(events.filter(event => !event.isCompleted))
+                    setSelectedTab('pending')
+                }
+                break
+            case 'completed':
+                if (events) {
+                    setFilteredEvent(events.filter(event => event.isCompleted))
+                    setSelectedTab('completed')
+                }
+                break
+            default:
+                if (events) {
+                    setFilteredEvent(events)
+                    setSelectedTab('all')
+                }
+                break
+        }
     }
 
     return (
@@ -168,7 +194,7 @@ const Events = () => {
                     </DialogContent>
                 </Dialog>
             </SubHeader>
-            <Nav />
+            <Nav handleFilter={handleFilter} selectedTab={selectedTab} />
             <Card className=' flex-1 pb-5 bg-transparent border-none shadow-none'>
                 {
                     isPending ?
@@ -189,7 +215,7 @@ const Events = () => {
                         <>
                             <div className="grid md:grid-cols-3 gap-3 pt-3">
                                 {
-                                    events && events.map((event, index) =>
+                                    filteredEvent.map((event, index) =>
                                         <Card className=" drop-shadow-xl" key={index}>
                                             <div className="px-6 py-2 flex justify-between items-center">
                                                 <div>
@@ -205,7 +231,7 @@ const Events = () => {
                                                 <h2 className="text-center">{event.name}</h2>
                                                 <div className="flex w-1/3 mx-auto text-gray-500 text-sm justify-between py-1">
                                                     <span><i className="fa-regular fa-image"></i> 2</span>
-                                                    <span><i className="fa-regular fa-square-check"></i> 0</span>
+                                                    <span className={`${event.isCompleted ? 'text-green-500' : ''}`}><i className="fa-regular fa-square-check"></i> </span>
                                                 </div>
                                             </CardContent>
                                             <CardFooter className="py-3 justify-between">
@@ -219,9 +245,9 @@ const Events = () => {
                                 }
                             </div>
                             {
-                                events?.length === 0 &&
+                                filteredEvent?.length === 0 &&
                                 <div className="flex items-center justify-center h-full">
-                                    <h2 className='text-gray-500'>No customer available</h2>
+                                    <h2 className='text-gray-500'>No event available</h2>
                                 </div>
                             }
                         </>

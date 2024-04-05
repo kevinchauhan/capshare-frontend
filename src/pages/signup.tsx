@@ -10,7 +10,6 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { register, self } from "@/http/api"
 import { Register } from "@/types"
 import { useAuthStore } from "@/store"
-import { AxiosError, AxiosResponse } from "axios"
 
 const signup = async (credentials: Register) => {
     const { data } = await register(credentials)
