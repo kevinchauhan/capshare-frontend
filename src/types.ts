@@ -26,12 +26,19 @@ export type EventData = {
     userId: string
     customerId: ICustomerData
     isCompleted: boolean
+    accessCode: string
 }
 
 export type PostEvent = {
     name: string
     customerId: string
     id?: string
+}
+export type UpdateEvent = {
+    id?: string
+    name?: string
+    customerId?: string
+    isCompleted?: boolean
 }
 
 export type FolderDetails = {

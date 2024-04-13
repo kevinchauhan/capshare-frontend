@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Switch } from "@/components/ui/switch"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
 import { useEventStore } from "@/store"
-import { EventData, ICustomerData, PostEvent } from "@/types"
+import { EventData, ICustomerData, PostEvent, UpdateEvent } from "@/types"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -35,7 +36,7 @@ const addEvent = async (data: PostEvent) => {
     return
 }
 
-const updateEvent = async (data: PostEvent) => {
+const updateEvent = async (data: UpdateEvent) => {
     const { data: res } = await updateEventRequest(data)
     return res
 }
@@ -74,7 +75,6 @@ const Events = () => {
         queryKey: ['customers'],
         queryFn: fetchCustomers
     })
-    console.log(events)
 
     const { mutate: addMutate } = useMutation({
         mutationKey: ['addEvent'],
@@ -100,8 +100,7 @@ const Events = () => {
         } else {
             setInputError(false)
             if (editId) {
-
-                // updateMutate({ ...values, id: editId })
+                updateMutate({ ...values, id: editId })
             } else {
                 addMutate(values)
             }
@@ -140,6 +139,10 @@ const Events = () => {
                 }
                 break
         }
+    }
+
+    const updateCompleteEvent = (value: boolean, id: string) => {
+        updateMutate({ isCompleted: value, id })
     }
 
     return (
@@ -230,12 +233,13 @@ const Events = () => {
                                             <CardContent className="border-y py-2">
                                                 <h2 className="text-center">{event.name}</h2>
                                                 <div className="flex w-1/3 mx-auto text-gray-500 text-sm justify-between py-1">
-                                                    <span><i className="fa-regular fa-image"></i> 2</span>
+                                                    <span><i className="fa-regular fa-image"></i> </span>
                                                     <span className={`${event.isCompleted ? 'text-green-500' : ''}`}><i className="fa-regular fa-square-check"></i> </span>
                                                 </div>
                                             </CardContent>
                                             <CardFooter className="py-3 justify-between">
-                                                <Button size='sm' variant='outline' className="">12547</Button>
+                                                <Button size='sm' variant='outline' className="">{event.accessCode}</Button>
+                                                <Switch checked={event.isCompleted} onCheckedChange={(val) => updateCompleteEvent(val, event._id)} />
                                                 <Link to={`/events/${event._id}`}>
                                                     <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
                                                 </Link>
