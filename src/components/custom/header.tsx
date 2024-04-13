@@ -18,7 +18,7 @@ const Header = () => {
     })
 
     return (
-        <header className="dark:border-b shadow bg-background dark:bg-transparent">
+        <header className={`${user ? 'dark:border-b shadow' : ''}  bg-background dark:bg-transparent`}>
             <div className="mx-auto px-4">
                 <div className="flex justify-between items-center py-4">
                     <div>
