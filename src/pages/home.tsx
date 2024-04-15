@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom"
+import { Card } from "@/components/ui/card"
 
 const Home = () => {
     return (
-        <div>home
-            <Link to='/customer'>CUSTOEMR</Link>
-        </div>
+        <Card>
+
+        </Card>
     )
 }
 

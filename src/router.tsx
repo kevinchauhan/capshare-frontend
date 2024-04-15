@@ -7,7 +7,6 @@ import Public from "./layouts/public";
 import Root from "./layouts/root";
 import Customer from "./pages/customer";
 import Events from "./pages/events";
-import Folder from "./pages/folder";
 import File from "./pages/file";
 
 export const router = createBrowserRouter([
