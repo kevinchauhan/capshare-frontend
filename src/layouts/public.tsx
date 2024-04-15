@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom"
 const Public = () => {
     const { user } = useAuthStore()
     if (user) {
-        return <Navigate to={'/'} replace={true} />
+        return <Navigate to={'/app'} replace={true} />
     }
     return (
         <>

@@ -33,7 +33,9 @@ const Root = () => {
         return <div>Loading...</div>
     }
 
-    return <Outlet />
+    return <>
+        <Outlet />
+    </>
 }
 
 export default Root

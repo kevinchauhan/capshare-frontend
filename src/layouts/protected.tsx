@@ -4,7 +4,7 @@ import Sidebar from "@/components/custom/sidebar"
 import Header from "@/components/custom/header"
 import { useState, useEffect } from "react"
 
-const Dashboard = () => {
+const Protected = () => {
     const { user } = useAuthStore();
     const [isUserLoaded, setIsUserLoaded] = useState(false); // Track user loading state
 
@@ -38,4 +38,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default Protected
