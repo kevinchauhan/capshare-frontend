@@ -98,7 +98,7 @@ const Login = () => {
                                 <Link to="/auth/signup" className="text-xs md:text-sm hover:underline">Don't have an account? Sign up</Link>
                             </div>
                             <div className="md:text-start text-center">
-                                <Button type="submit" className="" disabled={isPending}>
+                                <Button type="submit" className="text-white" disabled={isPending}>
                                     {
                                         isPending ? <div className="spinner-border h-5 w-5 mr-2 border-t-4 border-b-4 border-gray-100 rounded-full animate-spin"></div> : ''
                                     }
