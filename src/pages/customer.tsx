@@ -148,7 +148,11 @@ const Customer = () => {
                                         <Fragment key={customer._id}>
                                             <div className="flex items-center justify-between my-3">
                                                 <div className="flex items-center justify-between">
-                                                    <div className="w-10 h-10 bg-[#dfe5eb] dark:bg-secondary light:text-gray-700 flex items-center justify-center rounded-full mr-2">KC</div>
+                                                    <div className="w-10 h-10 bg-[#dfe5eb] dark:bg-secondary light:text-gray-700 flex items-center justify-center rounded-full mr-2 uppercase">
+                                                        {customer.name.split(' ')[0][0]}
+
+                                                        {customer.name.split(' ').length > 1 ? customer.name.split(' ')[1][0] : ''}
+                                                    </div>
                                                     <div>
                                                         <h3 className='capitalize font-medium'>{customer.name}</h3>
                                                         <h5 className='capitalize text-xs text-gray-500'>{customer.mobile}</h5>

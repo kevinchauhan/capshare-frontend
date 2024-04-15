@@ -10,9 +10,9 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useDropzone } from 'react-dropzone'
 import { EmptyObject } from "react-hook-form"
 import { Link, useParams } from "react-router-dom"
-import { partial } from "filesize"
+// import { partial } from "filesize"
 import { Skeleton } from "@/components/ui/skeleton"
-const filesize = partial({ standard: "jedec" })
+// const filesize = partial({ standard: "jedec" })
 
 const uploadImage = async (files: File[], eventId: string) => {
     try {
@@ -160,16 +160,16 @@ const File = () => {
                 }
                 {
                     files && files?.data.length > 0 &&
-                    <div className="grid grid-cols-6 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 items-start">
                         {
                             files.data.map(file =>
-                                <div key={file._id} className="rounded-md overflow-hidden border-2 max-h-50 flex flex-col">
-                                    <div className="flex flex-1 overflow-hidden">
+                                <div key={file._id} className="rounded-md overflow-hidden max-h-50 flex flex-col border-2">
+                                    <div className="flex flex-1 overflow-hidden items-start">
                                         <img src={file.path} className="object-contain mx-auto" alt="" />
                                     </div>
-                                    <div className="dark:bg-gray-900 bg-gray-200 p-1">
+                                    {/* <div className="dark:bg-gray-900 bg-gray-200 p-1">
                                         <p className="text-xs">Size: {filesize(file.size)}</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                             )
                         }

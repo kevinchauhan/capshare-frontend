@@ -216,7 +216,7 @@ const Events = () => {
                         </div>
                         :
                         <>
-                            <div className="grid md:grid-cols-3 gap-3 pt-3">
+                            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 pt-3">
                                 {
                                     filteredEvent.map((event, index) =>
                                         <Card className=" drop-shadow-xl" key={index}>
