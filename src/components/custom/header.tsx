@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { logout } from '@/http/api'
 import { useAuthStore } from '@/store'
 import { useTheme } from '../ui/theme-provider'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
     const { logout: storeLogout, user } = useAuthStore()
@@ -18,13 +19,23 @@ const Header = () => {
     })
 
     return (
-        <header className={`${user ? 'dark:border-b shadow' : ''}  bg-background dark:bg-transparent`}>
+        // ${!user ? 'md:fixed top-0 w-full' : ''}
+        <header className={`dark:border-b shadow bg-background dark:bg-transparent `}>
             <div className="mx-auto px-4">
-                <div className="flex justify-between items-center py-4">
-                    <div>
-                        {/* <Input name="search" placeholder="" /> */}
+                <div className="flex md:flex-row flex-col justify-between items-center py-5">
+                    <div className="logo text-primary text-3xl italic font-bold text-center">
+                        {!user && <h1><Link to={'/'}>CapShare</Link></h1>}
                     </div>
+                    {!user &&
+                        <div>
+                            <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/'}>Home</Link>
+                            <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/auth/login'}>Login</Link>
+                            <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/auth/signup'}>Signup</Link>
+                        </div>
+                    }
+
                     <div className='flex items-center gap-2'>
+                        {!user && <Link className='bg-primary text-white py-1 px-3 rounded' to={'/'}>Photo Selection</Link>}
                         <div>
                             {
                                 theme === 'dark' ?

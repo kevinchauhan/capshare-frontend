@@ -10,7 +10,9 @@ const Home = () => {
     return (
         <>
             <Header />
-            <div>Home</div>
+            <div className="">
+                <p>This is and photo seletion app between</p>
+            </div>
         </>
     )
 }

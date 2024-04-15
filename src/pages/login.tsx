@@ -57,8 +57,6 @@ const Login = () => {
 
     return (
         <div className="flex flex-col justify-center min-h-screen items-center">
-
-            <h1 className="text-2xl mb-2 font-medium">CapShare</h1>
             <Card className="md:w-1/3">
                 <CardHeader>
                     <CardTitle className="text-center mb-2 text-xl">Login</CardTitle>
