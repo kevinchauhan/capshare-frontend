@@ -240,7 +240,7 @@ const Events = () => {
                                             <CardFooter className="py-3 justify-between">
                                                 <Button size='sm' variant='outline' className="">{event.accessCode}</Button>
                                                 <Switch checked={event.isCompleted} onCheckedChange={(val) => updateCompleteEvent(val, event._id)} />
-                                                <Link to={`/events/${event._id}`}>
+                                                <Link to={`/app/events/${event._id}`}>
                                                     <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
                                                 </Link>
                                             </CardFooter>
