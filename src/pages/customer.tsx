@@ -7,6 +7,7 @@ import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { createCustomer, deleteCustomer, getCustomer, updateCustomerRequest } from '@/http/api'
 import { CustomerData, ICustomerData } from '@/types'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
@@ -159,8 +160,28 @@ const Customer = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <Button variant='outline' className='mr-2' onClick={() => handleEdit(index, customer._id)} >Edit</Button>
-                                                    <Button variant='outline' className='hover:bg-destructive hover:border-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
+
+                                                    {
+                                                        customer._id === '661d5a552461b024cb211d45' ?
+                                                            <TooltipProvider delayDuration={100}>
+                                                                <Tooltip>
+                                                                    <TooltipTrigger>
+                                                                        <Button variant='outline' className='mr-2' >Edit</Button>
+                                                                        <Button variant='outline' className='hover:bg-destructive hover:border-destructive'>Delete</Button>
+                                                                    </TooltipTrigger>
+                                                                    <TooltipContent>
+                                                                        <p>Cannot edit/delete demo customer</p>
+                                                                        <p>Add new customer to check!</p>
+                                                                    </TooltipContent>
+                                                                </Tooltip>
+                                                            </TooltipProvider>
+
+                                                            :
+                                                            <>
+                                                                <Button variant='outline' className='mr-2' onClick={() => handleEdit(index, customer._id)} >Edit</Button>
+                                                                <Button variant='outline' className='hover:bg-destructive hover:border-destructive' onClick={() => handleDelete(customer._id)} >Delete</Button>
+                                                            </>
+                                                    }
                                                 </div>
                                             </div>
                                             <DropdownMenuSeparator />

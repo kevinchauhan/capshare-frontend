@@ -238,8 +238,29 @@ const Events = () => {
                                                     <p className="text-gray-500 text-sm">{event.customerId.mobile}</p>
                                                 </div>
                                                 <div className="lg:text-lg" >
-                                                    <button onClick={() => handleEdit(index, event._id)} className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
-                                                    <button onClick={() => handleDelete(event._id)} className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
+
+
+                                                    {
+                                                        event._id === '661e6d0d2ee43e5f1e5568d4' ?
+                                                            <TooltipProvider delayDuration={100}>
+                                                                <Tooltip>
+                                                                    <TooltipTrigger>
+                                                                        <button className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
+                                                                        <button className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
+                                                                    </TooltipTrigger>
+                                                                    <TooltipContent>
+                                                                        <p>Cannot edit/delete demo event</p>
+                                                                        <p>Add new event to check!</p>
+                                                                    </TooltipContent>
+                                                                </Tooltip>
+                                                            </TooltipProvider>
+
+                                                            :
+                                                            <>
+                                                                <button onClick={() => handleEdit(index, event._id)} className="hover:text-yellow-300 mr-4"><i className="fa-regular fa-pen-to-square "></i></button>
+                                                                <button onClick={() => handleDelete(event._id)} className="hover:text-red-500"><i className="fa-regular fa-trash-can"></i></button>
+                                                            </>
+                                                    }
                                                 </div>
                                             </div>
                                             <CardContent className="border-y py-2">
