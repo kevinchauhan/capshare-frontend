@@ -197,7 +197,7 @@ const Events = () => {
                     </DialogContent>
                 </Dialog>
             </SubHeader>
-            <Nav handleFilter={handleFilter} selectedTab={selectedTab} />
+            <Nav handleFilter={handleFilter} selectedTab={selectedTab} filterNames={['pending', 'completed']} />
             <Card className=' flex-1 pb-5 bg-transparent border-none shadow-none'>
                 {
                     isPending ?
@@ -241,7 +241,7 @@ const Events = () => {
                                                 <Button size='sm' variant='outline' className="">{event.accessCode}</Button>
                                                 <Switch checked={event.isCompleted} onCheckedChange={(val) => updateCompleteEvent(val, event._id)} />
                                                 <Link to={`/app/events/${event._id}`}>
-                                                    <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary">Open</Button>
+                                                    <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary hover:text-white">Open</Button>
                                                 </Link>
                                             </CardFooter>
                                         </Card>

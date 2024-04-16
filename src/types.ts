@@ -54,18 +54,19 @@ export type FolderData = {
     customerId: string
     eventId: string
 }
+export type FileData = {
+    _id: string
+    name: string
+    eventId: string
+    originalname: string
+    mimetype: string
+    path: string
+    size: number
+    isSelected: boolean
+}
 
 export type FileDetails = {
-    data: [{
-        _id: string
-        name: string
-        eventId: string
-        originalname: string
-        mimetype: string
-        path: string
-        size: number
-        isSelected: boolean
-    }]
+    data: FileData[]
 }
 
 export type FilterEventTypes = {
