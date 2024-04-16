@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { createEvent, deleteEvent, getCustomer, getEvents, updateEventRequest } from "@/http/api"
 import { useEventStore } from "@/store"
 import { EventData, ICustomerData, PostEvent, UpdateEvent } from "@/types"
@@ -145,6 +146,17 @@ const Events = () => {
         updateMutate({ isCompleted: value, id })
     }
 
+    const handleCopyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const textToCopy = (e.target as HTMLButtonElement).innerText;
+        console.log(textToCopy)
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                // setCopied(true);
+                // setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+            })
+            .catch(err => console.error('Failed to copy:', err));
+    };
+
     return (
         <>
             <SubHeader title='Events' subTitle={`${events?.length} Events`}>
@@ -238,8 +250,26 @@ const Events = () => {
                                                 </div>
                                             </CardContent>
                                             <CardFooter className="py-3 justify-between">
-                                                <Button size='sm' variant='outline' className="">{event.accessCode}</Button>
-                                                <Switch checked={event.isCompleted} onCheckedChange={(val) => updateCompleteEvent(val, event._id)} />
+                                                <TooltipProvider delayDuration={100}>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Button onClick={handleCopyClick} size='sm' variant='outline' className="">{event.accessCode}</Button>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>Click to copy accesscode</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Switch checked={event.isCompleted} onCheckedChange={(val) => updateCompleteEvent(val, event._id)} />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>Toggle to change event status</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+
                                                 <Link to={`/app/events/${event._id}`}>
                                                     <Button size='sm' variant='outline' className="border-primary bg-transparent hover:bg-primary hover:text-white">Open</Button>
                                                 </Link>
