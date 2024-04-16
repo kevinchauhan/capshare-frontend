@@ -142,11 +142,11 @@ const Signup = () => {
                             <div className="text-end">
                                 <Link to="/auth/login" className="text-sm hover:underline">Already have an account? Log In</Link>
                             </div>
-                            <Button type="submit" className="" disabled={isPending}>
+                            <Button type="submit" className="text-white" disabled={isPending}>
                                 {
                                     isPending ? <div className="spinner-border h-5 w-5 mr-2 border-t-4 border-b-4 border-gray-100 rounded-full animate-spin"></div> : ''
                                 }
-                                Login</Button>
+                                Sign up</Button>
                         </form>
                     </Form>
                 </CardContent>

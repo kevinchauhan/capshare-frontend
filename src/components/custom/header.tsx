@@ -7,7 +7,7 @@ import { useTheme } from '../ui/theme-provider'
 import { Link } from 'react-router-dom'
 
 type Props = {
-    setIsMenuOpen: (arg: boolean) => void
+    setIsMenuOpen?: (arg: boolean) => void
 }
 
 const Header = ({ setIsMenuOpen }: Props) => {
