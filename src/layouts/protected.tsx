@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 const Protected = () => {
     const { user } = useAuthStore();
     const [isUserLoaded, setIsUserLoaded] = useState(false); // Track user loading state
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
         // Check if user is already available, otherwise set isUserLoaded to true after a brief delay
@@ -25,10 +26,10 @@ const Protected = () => {
         return <Navigate to={'/auth/login'} replace={true} />
     }
     return (
-        <div className="flex h-screen">
-            <Sidebar />
+        <div className="lg:flex h-screen">
+            <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
             <div className="flex-1 flex flex-col overflow-auto dark:bg-background bg-gray-100">
-                <Header />
+                <Header setIsMenuOpen={setIsMenuOpen} />
                 <div className="p-5 flex flex-col flex-1">
                     <Outlet />
                 </div>

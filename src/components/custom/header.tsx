@@ -6,7 +6,11 @@ import { useAuthStore } from '@/store'
 import { useTheme } from '../ui/theme-provider'
 import { Link } from 'react-router-dom'
 
-const Header = () => {
+type Props = {
+    setIsMenuOpen: (arg: boolean) => void
+}
+
+const Header = ({ setIsMenuOpen }: Props) => {
     const { logout: storeLogout, user } = useAuthStore()
     const { theme, setTheme } = useTheme()
 
@@ -22,12 +26,13 @@ const Header = () => {
         // ${!user ? 'md:fixed top-0 w-full' : ''}
         <header className={`dark:border-b shadow bg-background dark:bg-transparent `}>
             <div className="mx-auto px-4">
-                <div className="flex md:flex-row flex-col justify-between items-center py-5">
+                <div className={`flex md:flex-row ${!user ? 'flex-col' : ''} justify-between items-center py-5`}>
                     <div className="logo text-primary text-3xl italic font-bold text-center">
                         {!user && <h1><Link to={'/'}>CapShare</Link></h1>}
+                        {user && <button onClick={() => setIsMenuOpen(true)}><i className="fa-solid fa-bars text-gray-500 lg:hidden"></i></button>}
                     </div>
                     {!user &&
-                        <div>
+                        <div className='my-2'>
                             <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/'}>Home</Link>
                             <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/auth/login'}>Login</Link>
                             <Link className='dark:text-white hover:text-primary transition-all py-1 px-1 md:px-3 rounded' to={'/auth/signup'}>Signup</Link>
@@ -37,6 +42,7 @@ const Header = () => {
                     <div className='flex items-center gap-2'>
                         {!user && <Link className='bg-primary text-white py-1 px-3 rounded' to={'/'}>Photo Selection</Link>}
                         <div>
+
                             {
                                 theme === 'dark' ?
                                     <Button onClick={() => setTheme('light')} variant='outline' className='rounded-full w-8 h-8 p-0'>
@@ -73,7 +79,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-        </header>
+        </header >
     )
 }
 
