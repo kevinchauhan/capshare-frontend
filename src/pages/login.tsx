@@ -104,10 +104,10 @@ const Login = () => {
                             </div>
                         </form>
                     </Form>
-                    <div className="mt-5 border px-1 rounded bg-gray-100">
-                        <h2 className="text-gray-500">Test User:</h2>
-                        <h3 className="text-sm">Email id: <span className="text-gray-500">testuser@gmail.com</span></h3>
-                        <h3 className="text-sm">Password: <span className="text-gray-500">12345678</span></h3>
+                    <div className="mt-5 border p-1 rounded bg-gray-100 dark:bg-secondary">
+                        <h2 className="text-gray-500 dark:text-gray-300">Test User:</h2>
+                        <h3 className="text-sm">Email id: <span className="text-gray-500 dark:text-gray-200">testuser@gmail.com</span></h3>
+                        <h3 className="text-sm">Password: <span className="text-gray-500 dark:text-gray-200">12345678</span></h3>
                     </div>
                 </CardContent>
             </Card>
