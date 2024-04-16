@@ -29,7 +29,7 @@ const Header = ({ setIsMenuOpen }: Props) => {
                 <div className={`flex md:flex-row ${!user ? 'flex-col' : ''} justify-between items-center py-5`}>
                     <div className="logo text-primary text-3xl italic font-bold text-center">
                         {!user && <h1><Link to={'/'}>CapShare</Link></h1>}
-                        {user && <button onClick={() => setIsMenuOpen(true)}><i className="fa-solid fa-bars text-gray-500 lg:hidden"></i></button>}
+                        {user && setIsMenuOpen && <button onClick={() => setIsMenuOpen(true)}><i className="fa-solid fa-bars text-gray-500 lg:hidden"></i></button>}
                     </div>
                     {!user &&
                         <div className='my-2'>
