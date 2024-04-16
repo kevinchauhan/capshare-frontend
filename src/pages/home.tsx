@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom"
 const Home = () => {
     const { user } = useAuthStore()
     if (user) {
-        return <Navigate to={'/app'} replace={true} />
+        return <Navigate to={'/app/dashboard'} replace={true} />
     }
     return (
         <>
