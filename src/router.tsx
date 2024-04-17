@@ -9,6 +9,7 @@ import Events from "./pages/events";
 import File from "./pages/file";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
+import PhotoSelection from "./pages/photoSelection";
 
 export const router = createBrowserRouter([
     {
@@ -52,7 +53,11 @@ export const router = createBrowserRouter([
                     {
                         path: 'login',
                         element: <Login />
-                    }
+                    },
+                    {
+                        path: 'photo-selection',
+                        element: <PhotoSelection />,
+                    },
                 ]
             }
         ]

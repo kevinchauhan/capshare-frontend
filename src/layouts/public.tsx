@@ -8,7 +8,7 @@ const Public = () => {
         return <Navigate to={'/app/dashboard'} replace={true} />
     }
     return (
-        <div className="bg-gray-100">
+        <div className="bg-gray-100 dark:bg-card">
             <Header />
             <Outlet />
         </div>

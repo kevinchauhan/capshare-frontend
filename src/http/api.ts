@@ -1,5 +1,6 @@
 import { Credentials, CustomerData, FolderData, PostEvent, Register, UpdateEvent } from "@/types";
 import { api } from "./client";
+import { AccessCode } from "@/pages/photoSelection";
 
 export const register = (data: Register) => api.post('/auth/register', data)
 export const login = (credentials: Credentials) => api.post('/auth/login', credentials)
@@ -27,3 +28,6 @@ export const createFile = (id: string, data: FormData) => api.post(`/file/regist
     },
     withCredentials: true
 })
+
+export const access = (credentials: AccessCode) => api.post('/client', credentials)
+export const postSelected = (value: boolean, id: string) => api.get(`/file/select/${id}?selected=${value}`)

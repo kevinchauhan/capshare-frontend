@@ -40,7 +40,7 @@ const Header = ({ setIsMenuOpen }: Props) => {
                     }
 
                     <div className='flex items-center gap-2'>
-                        {!user && <Link className='bg-primary text-white py-1 px-3 rounded' to={'/'}>Photo Selection</Link>}
+                        {!user && <Link className='bg-primary text-white py-1 px-3 rounded' to={'/auth/photo-selection'}>Photo Selection</Link>}
                         <div>
 
                             {
